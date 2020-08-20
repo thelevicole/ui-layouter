@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>UI Layouter by Levi Cole</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/thelevicole/ui-layouter@1.0.0-alpha/dist/ui-layouter.css">
+
+    <style>
+
+        #app {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .items {
+            width: 200px;
+            align-self: flex-start;
+        }
+
+        .stage {
+            flex-grow: 1;
+            padding: 0 15px;
+            margin: 5px 0;
+            margin-left: 15px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="app">
+
+        <ul class="items list-unstyled">
+            <li class="m-3">
+                <button type="button" class="btn btn-outline-secondary btn-block shadow-sm">Item 1</button>
+            </li>
+            <li class="m-3">
+                <button type="button" class="btn btn-outline-secondary btn-block shadow-sm">Item 2</button>
+            </li>
+            <li class="m-3">
+                <button type="button" class="btn btn-outline-secondary btn-block shadow-sm">Item 3</button>
+            </li>
+            <li class="m-3">
+                <button type="button" class="btn btn-outline-secondary btn-block shadow-sm">Item 4</button>
+            </li>
+            <li class="m-3">
+                <button type="button" class="btn btn-outline-secondary btn-block shadow-sm">Item 5</button>
+            </li>
+        </ul>
+
+        <div class="stage"></div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/thelevicole/ui-layouter@1.0.0-alpha/dist/ui-layouter.jquery.js"></script>
+    <script>
+        ( function( $ ) {
+            'use strict';
+
+            var $builder = $( '.stage' ).uiLayouter();
+
+            $( '.items li button' ).on( 'click', function() {
+                $builder.addItem( $( this ) );
+            } );
+
+        } )( jQuery );
+    </script>
+</body>
+</html>
