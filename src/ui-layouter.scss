@@ -1,0 +1,137 @@
+$classes: (
+  builder: 'ui-layouter-js',
+  row: 'ui-layouter-js__row',
+  column: 'ui-layouter-js__column',
+  empty: 'ui-layouter-js__empty',
+  item: 'ui-layouter-js__item',
+  preview: 'ui-layouter-js__preview',
+  dragging: 'ui-layouter-js__dragging',
+  dragover: 'ui-layouter-js__dragover'
+);
+
+$dropzone-size: 7px;
+$dropzone-color: rgba(#000, 0.1);
+$dropzone-active: rgba(#000, 0.2);
+$dropzone-radius: 5px;
+
+$gutter: 10px;
+
+@function class($name) {
+  @return map-get($classes, $name);
+}
+
+@mixin el($name, $selector: '.') {
+  $class: class( $name );
+  #{$selector}#{$class} {
+    @content;
+  }
+}
+
+@include el('builder') {
+  &, * {
+    &, &:before, &:after {
+      box-sizing: border-box;
+    }
+  }
+
+  @include el('row') {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -($gutter/2);
+    margin-left: -($gutter/2);
+    margin-top: $gutter;
+    margin-bottom: $gutter;
+
+
+    @include el('empty', '&.') {
+      min-height: $dropzone-size;
+      background-color: $dropzone-color;
+      opacity: 0;
+      padding: 0;
+      margin: 0;
+      border-radius: $dropzone-radius;
+
+      @include el('dragover', '&.') {
+        background-color: $dropzone-active;
+      }
+    }
+
+    @include el('column') {
+      flex-basis: 0;
+      flex-grow: 1;
+      min-width: 0;
+      max-width: 100%;
+      padding-left: $gutter;
+      padding-right: $gutter;
+      position: relative;
+
+      @include el('empty', '&.') {
+        max-width: $dropzone-size;
+        background-color: $dropzone-color;
+        padding: 0;
+        margin: 0;
+        opacity: 0;
+        border-radius: $dropzone-radius;
+
+        @include el('dragover', '&.') {
+          background-color: $dropzone-active;
+        }
+      }
+    }
+  }
+
+  @include el('dragging', '&.') {
+    @include el('row') {
+      @include el('empty', '&.') {
+        opacity: 1;
+      }
+      @include el('column') {
+        @include el('empty', '&.') {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  // Single item on stage. Only styles item if no other classes exist
+  [class="#{class('item')}"] {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+
+    padding: 5px;
+    border-radius: 3px;
+    background-color: pink;
+    text-align: center;
+    overflow: hidden;
+
+    .handle {
+      width: 20px;
+      background-color: rgba(#000, 0.1);
+      position: relative;
+      min-height: 2px;
+      margin: -5px;
+      margin-right: 5px;
+      cursor: move;
+    }
+  }
+
+  // Preview
+  @include el('preview') {
+    position: fixed;
+    z-index: 999;
+    pointer-events: none;
+    display: block;
+    width: 200px;
+    background-color: #ddd;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    box-shadow: 0 5px 10px -3px rgba(#000, 0.2);
+    opacity: 0.7;
+    border-radius: 3px;
+  }
+
+}
