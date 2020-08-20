@@ -1,4 +1,6 @@
-$classes: (
+$uil-classes: () !default;
+
+$uil-classes: map-merge( (
   builder: 'ui-layouter-js',
   row: 'ui-layouter-js__row',
   column: 'ui-layouter-js__column',
@@ -7,87 +9,87 @@ $classes: (
   preview: 'ui-layouter-js__preview',
   dragging: 'ui-layouter-js__dragging',
   dragover: 'ui-layouter-js__dragover'
-);
+), $uil-classes );
 
-$dropzone-size: 7px;
-$dropzone-color: rgba(#000, 0.1);
-$dropzone-active: rgba(#000, 0.2);
-$dropzone-radius: 5px;
+$uil-dropzone-size: 7px !default;
+$uil-dropzone-color: rgba(#000, 0.1) !default;
+$uil-dropzone-active: rgba(#000, 0.2) !default;
+$uil-dropzone-radius: 5px !default;
 
-$gutter: 10px;
+$uil-gutter: 10px;
 
-@function class($name) {
-  @return map-get($classes, $name);
+@function uil-class($name) {
+  @return map-get($uil-classes, $name);
 }
 
-@mixin el($name, $selector: '.') {
-  $class: class( $name );
+@mixin uil-el($name, $selector: '.') {
+  $class: uil-class($name);
   #{$selector}#{$class} {
     @content;
   }
 }
 
-@include el('builder') {
+@include uil-el('builder') {
   &, * {
     &, &:before, &:after {
       box-sizing: border-box;
     }
   }
 
-  @include el('row') {
+  @include uil-el('row') {
     position: relative;
     display: flex;
     flex-wrap: wrap;
-    margin-right: -($gutter/2);
-    margin-left: -($gutter/2);
-    margin-top: $gutter;
-    margin-bottom: $gutter;
+    margin-right: -($uil-gutter/2);
+    margin-left: -($uil-gutter/2);
+    margin-top: $uil-gutter;
+    margin-bottom: $uil-gutter;
 
 
-    @include el('empty', '&.') {
-      min-height: $dropzone-size;
-      background-color: $dropzone-color;
+    @include uil-el('empty', '&.') {
+      min-height: $uil-dropzone-size;
+      background-color: $uil-dropzone-color;
       opacity: 0;
       padding: 0;
       margin: 0;
-      border-radius: $dropzone-radius;
+      border-radius: $uil-dropzone-radius;
 
-      @include el('dragover', '&.') {
-        background-color: $dropzone-active;
+      @include uil-el('dragover', '&.') {
+        background-color: $uil-dropzone-active;
       }
     }
 
-    @include el('column') {
+    @include uil-el('column') {
       flex-basis: 0;
       flex-grow: 1;
       min-width: 0;
       max-width: 100%;
-      padding-left: $gutter;
-      padding-right: $gutter;
+      padding-left: $uil-gutter;
+      padding-right: $uil-gutter;
       position: relative;
 
-      @include el('empty', '&.') {
-        max-width: $dropzone-size;
-        background-color: $dropzone-color;
+      @include uil-el('empty', '&.') {
+        max-width: $uil-dropzone-size;
+        background-color: $uil-dropzone-color;
         padding: 0;
         margin: 0;
         opacity: 0;
-        border-radius: $dropzone-radius;
+        border-radius: $uil-dropzone-radius;
 
-        @include el('dragover', '&.') {
-          background-color: $dropzone-active;
+        @include uil-el('dragover', '&.') {
+          background-color: $uil-dropzone-active;
         }
       }
     }
   }
 
-  @include el('dragging', '&.') {
-    @include el('row') {
-      @include el('empty', '&.') {
+  @include uil-el('dragging', '&.') {
+    @include uil-el('row') {
+      @include uil-el('empty', '&.') {
         opacity: 1;
       }
-      @include el('column') {
-        @include el('empty', '&.') {
+      @include uil-el('column') {
+        @include uil-el('empty', '&.') {
           opacity: 1;
         }
       }
@@ -95,7 +97,7 @@ $gutter: 10px;
   }
 
   // Single item on stage. Only styles item if no other classes exist
-  [class="#{class('item')}"] {
+  [class="#{uil-class('item')}"] {
     position: relative;
     display: flex;
     flex-direction: row;
@@ -120,7 +122,7 @@ $gutter: 10px;
   }
 
   // Preview
-  @include el('preview') {
+  @include uil-el('preview') {
     position: fixed;
     z-index: 999;
     pointer-events: none;
