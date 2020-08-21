@@ -19,6 +19,8 @@
         .items {
             width: 200px;
             align-self: flex-start;
+            overflow-y: auto;
+            max-height: 100vh;
         }
 
         .stage {
@@ -28,12 +30,36 @@
             margin-left: 15px;
         }
 
+        /* Dotted handle */
+        .my-custom-draggable .handle {
+            display: inline-block;
+            width: 20px;
+            height: 30px;
+            overflow: hidden;
+            
+            font-size: 1rem;
+            line-height: 6px;
+            letter-spacing: 2px;
+            vertical-align: middle;
+            color: #cccccc;
+            font-weight: bold;
+            text-align: center;
+
+            cursor: move;
+            margin-top: -0.25rem;
+        }
+
+        .my-custom-draggable .handle:after {
+            content: '.. .. .. ..';
+        }
+
     </style>
 </head>
 <body>
 
     <div id="app">
 
+        <!-- Item list to choose from -->
         <ul class="items list-unstyled">
             <li class="m-3">
                 <button type="button" class="btn btn-outline-secondary btn-block shadow-sm">Item 1</button>
@@ -52,9 +78,27 @@
             </li>
         </ul>
 
+        <!-- UI layouter stage -->
         <div class="stage"></div>
 
     </div>
+
+    <!-- Stag item template -->
+    <script type="text/template" id="item-template">
+        <div class="my-custom-draggable card shadow-sm">
+            <div class="card-body p-2 row align-items-center no-gutters">
+                <div class="col-auto">
+                    <div class="handle" draggable="true" title="Click and drag"></div>
+                </div>
+                <div class="col">
+                    <div class="contents px-2"></div>
+                </div>
+                <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-outline-danger btn-sm" data-action="remove">&times;</button>
+                </div>
+            </div>
+        </div>
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/thelevicole/ui-layouter@1.0.0-alpha/dist/ui-layouter.jquery.js"></script>
@@ -62,10 +106,31 @@
         ( function( $ ) {
             'use strict';
 
-            var $builder = $( '.stage' ).uiLayouter();
+            // Initiate builder
+            var $builder = $( '.stage' ).uiLayouter( {
+                createItem: function( $controller, $el ) {
+                    var $item = $( $( '#item-template' ).text() );
+                    $item.find( '.contents' ).text( $el.text() );
+                    return $item;
+                }
+            } );
 
+            // Add item to builder
             $( '.items li button' ).on( 'click', function() {
                 $builder.addItem( $( this ) );
+            } );
+
+            // Confirm and remove item from builder
+            $builder.on( 'click', 'button[data-action="remove"]', function() {
+                var $item = $builder.getItem( $( this ) );
+
+                if ( $item.length ) {
+                    if ( confirm( 'Are you sure you want to remove this item?' ) ) {
+                        $builder.removeItem( $item );
+                    }
+
+                    return false;
+                }
             } );
 
         } )( jQuery );
